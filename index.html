@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWICE News</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF5FA2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-apricot: #FCC89B;
+            --color-neon-magenta: #FF5FA2;
+            --color-bg: #FFF0F5;
+            --color-text: #333;
+            --color-card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', 'M PLUS Rounded 1c', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            padding-bottom: 2rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--color-apricot), var(--color-neon-magenta));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .news-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-card {
+            background: var(--color-card-bg);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 12px rgba(255, 95, 162, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .news-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 95, 162, 0.25);
+            border-color: var(--color-apricot);
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            background-color: #fce4ec;
+            color: var(--color-neon-magenta);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .news-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            color: #2c2c2c;
+        }
+
+        .news-summary {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            background: var(--color-neon-magenta);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .news-link:hover {
+            background: #e6458a;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-neon-magenta);
+        }
+
+        @media (min-width: 600px) {
+            .news-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>TWICE NEWS</h1>
+    </header>
+
+    <main>
+        <div id="news-container" class="news-container">
+            <div class="loading">Loading news...</div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('news_data.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderNews(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching news:', error);
+                    document.getElementById('news-container').innerHTML = 
+                        '<p style="text-align:center; color:#666;">ニュースの読み込みに失敗しました。</p>';
+                });
+        });
+
+        function renderNews(newsItems) {
+            const container = document.getElementById('news-container');
+            container.innerHTML = ''; // Clear loading
+
+            if (newsItems.length === 0) {
+                container.innerHTML = '<p style="text-align:center;">新しいニュースはありません。</p>';
+                return;
+            }
+
+            newsItems.forEach(item => {
+                const card = document.createElement('article');
+                card.className = 'news-card';
+
+                const summary = item.summary ? item.summary : '詳細記事をご覧ください。';
+                
+                card.innerHTML = `
+                    <div class="news-date">${item.date}</div>
+                    <h2 class="news-title">${item.title}</h2>
+                    <p class="news-summary">${summary}</p>
+                    <a href="${item.url}" target="_blank" class="news-link">記事を読む</a>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>

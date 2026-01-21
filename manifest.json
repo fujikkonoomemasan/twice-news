@@ -1,0 +1,21 @@
+{
+  "name": "TWICE News",
+  "short_name": "TWICE News",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FCC89B",
+  "theme_color": "#FF5FA2",
+  "description": "TWICEの最新ニュースをお届けするアプリ",
+  "icons": [
+    {
+      "src": "https://placehold.co/192x192/FF5FA2/FCC89B?text=TWICE",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://placehold.co/512x512/FF5FA2/FCC89B?text=TWICE",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
