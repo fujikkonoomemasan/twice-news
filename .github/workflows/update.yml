@@ -1,0 +1,36 @@
+name: Update TWICE News
+
+on:
+  schedule:
+    # 1時間ごとに実行（毎時0分）
+    - cron: '0 * * * *'
+  workflow_dispatch: # 手動でもボタン一つで実行できるようにする
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # データを書き込む許可を与える
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 必要なライブラリをインストール
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: ニュースボットを実行
+        run: python news_bot.py
+
+      - name: 更新があれば保存（Commit & Push）
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add news_data.json
+          # 変更がある時だけ保存する処理
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update news data automatically" && git push)
