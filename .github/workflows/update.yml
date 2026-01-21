@@ -2,8 +2,8 @@ name: Update TWICE News
 
 on:
   schedule:
-    # 1時間ごとに実行（毎時0分）
-    - cron: '0 * * * *'
+    # 10分ごとに実行（*/10）
+    - cron: '*/30 * * * *'
   workflow_dispatch: # 手動でもボタン一つで実行できるようにする
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
 
       - name: 必要なライブラリをインストール
         run: |
-          pip install requests beautifulsoup4
+          pip install requests beautifulsoup4 lxml  # ← lxmlを追加！
 
       - name: ニュースボットを実行
         run: python news_bot.py
