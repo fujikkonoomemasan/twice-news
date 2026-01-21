@@ -1,201 +1,141 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TWICE News</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF5FA2">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-apricot: #FCC89B;
-            --color-neon-magenta: #FF5FA2;
-            --color-bg: #FFF0F5;
-            --color-text: #333;
-            --color-card-bg: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Outfit', 'M PLUS Rounded 1c', sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            padding-bottom: 2rem;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--color-apricot), var(--color-neon-magenta));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        main {
-            padding: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .news-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .news-card {
-            background: var(--color-card-bg);
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 12px rgba(255, 95, 162, 0.15);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 2px solid transparent;
-        }
-
-        .news-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 95, 162, 0.25);
-            border-color: var(--color-apricot);
-        }
-
-        .news-date {
-            font-size: 0.85rem;
-            color: #888;
-            margin-bottom: 0.5rem;
-            display: inline-block;
-            background-color: #fce4ec;
-            color: var(--color-neon-magenta);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-        }
-
-        .news-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-            color: #2c2c2c;
-        }
-
-        .news-summary {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .news-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            background: var(--color-neon-magenta);
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            width: 100%;
-            transition: background 0.3s;
-        }
-
-        .news-link:hover {
-            background: #e6458a;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--color-neon-magenta);
-        }
-
-        @media (min-width: 600px) {
-            .news-card {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.2">
+  <style type="text/css">
+    body {background-color: #ffecf2}
+    span.s1 {font-kerning: none; text-shadow: 1.0px 1.0px 2.0px rgba(255, 255, 255, 0)}
+  </style>
 </head>
 <body>
-
-    <header>
-        <h1>TWICE NEWS</h1>
-    </header>
-
-    <main>
-        <div id="news-container" class="news-container">
-            <div class="loading">Loading news...</div>
-        </div>
-    </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('news_data.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    renderNews(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching news:', error);
-                    document.getElementById('news-container').innerHTML = 
-                        '<p style="text-align:center; color:#666;">ニュースの読み込みに失敗しました。</p>';
-                });
-        });
-
-        function renderNews(newsItems) {
-            const container = document.getElementById('news-container');
-            container.innerHTML = ''; // Clear loading
-
-            if (newsItems.length === 0) {
-                container.innerHTML = '<p style="text-align:center;">新しいニュースはありません。</p>';
-                return;
-            }
-
-            newsItems.forEach(item => {
-                const card = document.createElement('article');
-                card.className = 'news-card';
-
-                const summary = item.summary ? item.summary : '詳細記事をご覧ください。';
-                
-                card.innerHTML = `
-                    <div class="news-date">${item.date}</div>
-                    <h2 class="news-title">${item.title}</h2>
-                    <p class="news-summary">${summary}</p>
-                    <a href="${item.url}" target="_blank" class="news-link">記事を読む</a>
-                `;
-
-                container.appendChild(card);
-            });
-        }
-    </script>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1">&lt;!DOCTYPE html&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1">&lt;html lang="ja"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1">&lt;head&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;TWICE NEWS&lt;/title&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link rel="manifest" href="manifest.json"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;family=Zen+Kaku+Gothic+New:wght@400;700&amp;display=swap" rel="stylesheet"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"><span class="Apple-converted-space">    </span></span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* TWICE Official Colors */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>:root {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>--apricot: #FCC89B;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>--magenta: #FF5FA2;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>--gradient: linear-gradient(135deg, #FCC89B 0%, #FF5FA2 100%);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>--glass-bg: rgba(255, 255, 255, 0.9);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>--text-color: #333;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'Poppins', 'Zen Kaku Gothic New', sans-serif;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--gradient); /* 背景をグラデーションに */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background-attachment: fixed; /* 背景を固定して高級感を出す */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--text-color);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>min-height: 100vh;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* ヘッダーデザイン */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>header {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background-color: rgba(255, 255, 255, 0.95);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>text-align: center;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>position: sticky;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>top: 0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 100;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(5px);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>header h1 {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--gradient);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>-webkit-background-clip: text;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>-webkit-text-fill-color: transparent; /* 文字だけグラデーションにする */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 800;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>letter-spacing: 2px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* メインコンテンツ */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>#news-container {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 600px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin: 20px auto;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0 15px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding-bottom: 80px; /* 下部の余白 */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* ニュースカードのデザイン */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--glass-bg);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 15px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>transition: transform 0.2s ease, box-shadow 0.2s ease;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>animation: fadeUp 0.6s ease forwards; /* ふわっと表示 */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>opacity: 0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>border-left: 5px solid var(--magenta); /* 左端にアクセントカラー */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* アニメーション設定 */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes fadeUp {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(20px); }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>/* カードを順番に表示させるための遅延 */</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:nth-child(1) { animation-delay: 0.1s; }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:nth-child(2) { animation-delay: 0.2s; }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:nth-child(3) { animation-delay: 0.3s; }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:nth-child(4) { animation-delay: 0.4s; }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:nth-child(5) { animation-delay: 0.5s; }</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-card:hover {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>transform: translateY(-5px);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 12px 20px rgba(255, 95, 162, 0.2);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-source {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 0.8rem;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>color: #888;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>gap: 5px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"><span class="Apple-converted-space">        </span></span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.source-badge {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background: #eee;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>padding: 2px 8px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 10px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 0.7rem;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: bold;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"><span class="Apple-converted-space">        </span></span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.source-badge.official {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>background: #ffe0f0;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--magenta);</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-date {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 0.85rem;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>color: #aaa;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>}</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 26.0px"><span class="s1"></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">        </span>.news-title {</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 1.1rem;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 700;</span></h1>
+<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 21.6px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0 0 10px 0;</span></h1>
 </body>
 </html>
