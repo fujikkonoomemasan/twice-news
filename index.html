@@ -12,11 +12,7 @@
         :root {
             --apricot: #FCC89B;
             --magenta: #FF5FA2;
-            --deep-purple: #4a1e45;
             --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow-sm: 0 4px 15px rgba(255, 95, 162, 0.15);
-            --shadow-lg: 0 10px 40px rgba(255, 95, 162, 0.25);
             --text-main: #2d2d2d;
             --text-sub: #777;
         }
@@ -28,480 +24,261 @@
             background: linear-gradient(160deg, #fff0f5 0%, #fff 40%, #fff0eb 100%);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 140px; /* プレイヤーとナビの分 */
+            padding-bottom: 100px; /* ナビの分 */
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 背景の装飾（オーロラ） */
+        /* 背景装飾 */
         body::before {
-            content: '';
-            position: fixed;
-            top: -20%;
-            left: -20%;
-            width: 80%;
-            height: 60%;
+            content: ''; position: fixed; top: -20%; left: -20%; width: 80%; height: 60%;
             background: radial-gradient(circle, rgba(255,95,162,0.2) 0%, rgba(255,255,255,0) 70%);
-            filter: blur(60px);
-            z-index: -1;
-            animation: float 20s infinite ease-in-out;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -10%;
-            right: -10%;
-            width: 70%;
-            height: 50%;
-            background: radial-gradient(circle, rgba(252,200,155,0.3) 0%, rgba(255,255,255,0) 70%);
-            filter: blur(50px);
-            z-index: -1;
-            animation: float 15s infinite reverse ease-in-out;
+            filter: blur(60px); z-index: -1; animation: float 20s infinite ease-in-out;
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            50% { transform: translate(20px, 40px); }
-            100% { transform: translate(0, 0); }
-        }
+        @keyframes float { 0%,100% { transform: translate(0,0); } 50% { transform: translate(20px,40px); } }
 
-        /* ヘッダーエリア */
+        /* ヘッダー */
         .app-header {
             padding: 20px 24px 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
         }
-        
-        .user-greeting h1 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin: 0;
+        .app-header h1 {
+            font-size: 1.5rem; font-weight: 800; margin: 0;
             background: linear-gradient(90deg, var(--magenta), var(--apricot));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .user-greeting p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            font-weight: 600;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .header-icon {
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-sm);
-            color: var(--magenta);
-            font-size: 1.1rem;
-        }
+        /* コンテンツエリア切り替え用 */
+        .view-section { display: none; padding: 15px 20px; animation: fadeIn 0.3s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* デビュー日カウンターウィジェット */
-        .widget-area {
-            padding: 15px 20px;
-        }
-        
-        .main-widget {
+        /* --- HOME (NEWS) Styles --- */
+        .widget-box {
             background: linear-gradient(135deg, var(--magenta), #ff8fab);
-            border-radius: 24px;
-            padding: 20px;
-            color: white;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
+            border-radius: 20px; padding: 20px; color: white;
+            box-shadow: 0 10px 30px rgba(255, 95, 162, 0.25);
+            margin-bottom: 25px; position: relative; overflow: hidden;
         }
-
-        .main-widget::after {
-            content: '🍭';
-            position: absolute;
-            right: -10px;
-            bottom: -20px;
-            font-size: 8rem;
-            opacity: 0.2;
-            transform: rotate(-20deg);
+        .widget-box::after {
+            content: '🍭'; position: absolute; right: -10px; bottom: -20px;
+            font-size: 6rem; opacity: 0.2; transform: rotate(-20deg);
         }
+        .days-count { font-size: 2.2rem; font-weight: 800; }
 
-        .widget-label {
-            font-size: 0.8rem;
-            opacity: 0.9;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .counter-box {
-            display: flex;
-            align-items: baseline;
-            margin-top: 5px;
-        }
-
-        .days-count {
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .days-label {
-            font-size: 1rem;
-            margin-left: 5px;
-            font-weight: 600;
-        }
-
-        /* タブ切り替え */
-        .tab-menu {
-            display: flex;
-            gap: 15px;
-            padding: 10px 24px;
-            overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-        }
-        .tab-menu::-webkit-scrollbar { display: none; }
-
-        .tab-item {
-            padding: 10px 20px;
-            background: white;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            white-space: nowrap;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0,0,0,0.05);
-            cursor: pointer;
-        }
-
-        .tab-item.active {
-            background: var(--text-main);
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* ニュースリスト */
-        #news-container {
-            padding: 10px 20px;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            margin: 10px 5px 15px;
-            color: var(--text-main);
-        }
-
-        /* リッチなニュースカード */
         .news-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.2s;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 16px; margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-decoration: none; color: inherit; display: block;
         }
+        .news-tag {
+            font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+            margin-right: 8px; text-transform: uppercase;
+        }
+        .tag-official { background: rgba(255,95,162,0.1); color: var(--magenta); }
+        .tag-media { background: rgba(0,0,0,0.05); color: #555; }
 
-        .news-card:active {
-            transform: scale(0.98);
+        /* --- MOVIE Styles --- */
+        .video-card {
+            margin-bottom: 25px; border-radius: 16px; overflow: hidden;
+            background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .video-info { padding: 12px 15px; }
+        .video-title { font-weight: 700; font-size: 0.95rem; margin: 0; }
+        .video-meta { font-size: 0.8rem; color: #888; margin-top: 5px; }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* --- SCHEDULE Styles --- */
+        .timeline { position: relative; padding-left: 20px; border-left: 2px solid #ddd; margin-left: 10px; }
+        .timeline-item { position: relative; margin-bottom: 30px; padding-left: 20px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -26px; top: 5px;
+            width: 10px; height: 10px; background: var(--magenta);
+            border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,95,162,0.2);
         }
+        .schedule-date { font-weight: 800; color: var(--magenta); font-size: 0.9rem; }
+        .schedule-title { font-weight: 700; margin: 5px 0; font-size: 1rem; }
+        .schedule-desc { font-size: 0.85rem; color: #666; }
+        .is-past { opacity: 0.5; } /* 過去のイベント */
 
-        .source-pill {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 8px;
-            text-transform: uppercase;
-        }
-        
-        .source-official { background: rgba(255, 95, 162, 0.1); color: var(--magenta); }
-        .source-news { background: rgba(100, 100, 100, 0.1); color: #555; }
-
-        .news-date {
-            font-size: 0.75rem;
-            color: #999;
-            font-weight: 600;
-        }
-
-        .news-title {
-            font-size: 1rem;
-            font-weight: 700;
-            line-height: 1.5;
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .news-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* プレイヤー風UI（装飾） */
-        .mini-player {
-            position: fixed;
-            bottom: 85px; /* ナビの上 */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            background: rgba(40, 40, 40, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 90;
-        }
-
-        .track-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .album-art {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, var(--apricot), var(--magenta));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .track-text h4 {
-            margin: 0;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .track-text p {
-            margin: 0;
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-
-        .player-controls {
-            font-size: 1.2rem;
-            margin-right: 10px;
-        }
-
-        /* ボトムナビゲーション */
+        /* ボトムナビ */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 10px 0 25px; /* iPhoneの下部バー考慮 */
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            z-index: 100;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+            padding: 10px 0 25px; display: flex; justify-content: space-around;
+            border-top: 1px solid rgba(0,0,0,0.05); z-index: 100;
         }
-
         .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: #aaa;
-            font-size: 1.2rem;
-            cursor: pointer;
-            width: 60px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: #aaa; font-size: 1.2rem; cursor: pointer; width: 60px; transition: 0.2s;
         }
-
-        .nav-btn.active {
-            color: var(--magenta);
-        }
-
-        .nav-label {
-            font-size: 0.6rem;
-            font-weight: 600;
-        }
-
-        /* ローディングスケルトン */
-        .skeleton {
-            background: #eee;
-            background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
-            background-size: 200% 100%;
-            animation: shine 1.5s infinite linear;
-            border-radius: 12px;
-        }
-        .sk-card { height: 120px; margin-bottom: 15px; border-radius: 20px; }
-        
-        @keyframes shine {
-            to { background-position-x: -200%; }
-        }
+        .nav-btn.active { color: var(--magenta); transform: translateY(-3px); }
+        .nav-label { font-size: 0.6rem; font-weight: 600; }
 
     </style>
 </head>
 <body>
 
     <header class="app-header">
-        <div class="user-greeting">
-            <p>Good Evening,</p>
-            <h1>ONCE</h1>
-        </div>
-        <div class="header-icon">
-            <i class="fa-solid fa-bell"></i>
-        </div>
+        <h1>TWICE WORLD</h1>
+        <i class="fa-solid fa-gear" style="color:#ccc;"></i>
     </header>
 
-    <div class="widget-area">
-        <div class="main-widget">
-            <div class="widget-label">SINCE 2015.10.20</div>
-            <div class="counter-box">
-                <span class="days-count" id="debut-days">0000</span>
-                <span class="days-label">DAYS WITH TWICE</span>
+    <div id="view-home" class="view-section active">
+        <div class="widget-box">
+            <div style="font-size:0.8rem; opacity:0.9;">DAYS WITH TWICE</div>
+            <div class="days-count" id="debut-days">0000</div>
+            <div style="font-size:0.8rem; margin-top:5px;">SINCE 2015.10.20</div>
+        </div>
+
+        <h3 style="margin-left:5px;">Latest News</h3>
+        <div id="news-list">
+            <div style="text-align:center; padding:20px;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--magenta);"></i> Loading...
             </div>
         </div>
     </div>
 
-    <div class="tab-menu">
-        <div class="tab-item active" onclick="filterNews('all', this)">All</div>
-        <div class="tab-item" onclick="filterNews('Official', this)">Official</div>
-        <div class="tab-item" onclick="filterNews('News', this)">Media</div>
+    <div id="view-movie" class="view-section">
+        <h3 style="margin-left:5px; margin-bottom:15px;">Music Videos</h3>
+        <div id="video-list"></div>
     </div>
 
-    <div id="news-container">
-        <div class="section-title">Latest Updates</div>
-        <div id="loading-skeleton">
-            <div class="skeleton sk-card"></div>
-            <div class="skeleton sk-card"></div>
-            <div class="skeleton sk-card"></div>
-        </div>
-    </div>
-
-    <div class="mini-player">
-        <div class="track-info">
-            <div class="album-art">🍭</div>
-            <div class="track-text">
-                <h4>STRATEGY (feat. Megan)</h4>
-                <p>TWICE • The 14th Mini Album</p>
+    <div id="view-schedule" class="view-section">
+        <h3 style="margin-left:5px; margin-bottom:15px;">Schedule</h3>
+        <div class="timeline" id="schedule-list">
             </div>
-        </div>
-        <div class="player-controls">
-            <i class="fa-solid fa-play"></i>
-        </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-btn active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <i class="fa-solid fa-house"></i>
-            <span class="nav-label">Home</span>
+        <div class="nav-btn active" onclick="switchTab('home', this)">
+            <i class="fa-solid fa-newspaper"></i><span class="nav-label">Home</span>
         </div>
-        <div class="nav-btn" onclick="location.reload()">
-            <i class="fa-solid fa-rotate"></i>
-            <span class="nav-label">Refresh</span>
+        <div class="nav-btn" onclick="switchTab('movie', this)">
+            <i class="fa-solid fa-play-circle"></i><span class="nav-label">Movie</span>
+        </div>
+        <div class="nav-btn" onclick="switchTab('schedule', this)">
+            <i class="fa-solid fa-calendar-day"></i><span class="nav-label">Schedule</span>
         </div>
         <div class="nav-btn" onclick="window.open('https://www.twicejapan.com/','_blank')">
-            <i class="fa-solid fa-globe"></i>
-            <span class="nav-label">Official</span>
+            <i class="fa-solid fa-globe"></i><span class="nav-label">Official</span>
         </div>
     </nav>
 
     <script>
-        // デビュー日カウンター計算
+        // --- 1. 設定データ (ここを変えれば手動で更新可能) ---
+        
+        // ★ MVリスト (YouTube IDを入れる)
+        const mvData = [
+            { id: "eL64n91W_eE", title: "Strategy (feat. Megan Thee Stallion)", date: "2024.12" },
+            { id: "M0c04L2d6Q8", title: "ONE SPARK", date: "2024.02" },
+            { id: "b2f6J5t6n_4", title: "DIVE", date: "2024.07" },
+            { id: "722x24qg91E", title: "Hare Hare", date: "2023.05" },
+            { id: "c7rCyll5AeY", title: "The Feels", date: "2021.10" }
+        ];
+
+        // ★ スケジュールリスト (未来の日付を入れる)
+        const scheduleData = [
+            { date: "2025-07-16", title: "MISAMO JAPAN DOME TOUR 2024", desc: "Blu-ray Release" },
+            { date: "2025-10-20", title: "10th Anniversary", desc: "Special Live & Event (予想)" },
+            { date: "2026-01-01", title: "New Year Greeting", desc: "Official YouTube" }
+        ];
+
+        // --- 2. 機能の実装 ---
+
+        // タブ切り替え機能
+        function switchTab(tabName, navEl) {
+            // タブの見た目
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            if(navEl) navEl.classList.add('active');
+
+            // 画面の切り替え
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + tabName).classList.add('active');
+
+            // ページトップへ
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+
+        // デビュー日計算
         const debutDate = new Date('2015-10-20');
-        const today = new Date();
-        const diffTime = Math.abs(today - debutDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        const diffDays = Math.ceil(Math.abs(new Date() - debutDate) / (1000 * 60 * 60 * 24)); 
         document.getElementById('debut-days').innerText = diffDays;
 
-        // データ保持用
-        let allNewsData = [];
+        // MVの表示
+        const videoContainer = document.getElementById('video-list');
+        mvData.forEach(mv => {
+            const vHtml = `
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/${mv.id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4 class="video-title">${mv.title}</h4>
+                        <div class="video-meta">${mv.date} Release</div>
+                    </div>
+                </div>`;
+            videoContainer.innerHTML += vHtml;
+        });
 
-        // データの読み込み
+        // スケジュールの表示
+        const scheduleContainer = document.getElementById('schedule-list');
+        const today = new Date().toISOString().split('T')[0];
+
+        scheduleData.forEach(sch => {
+            const isPast = sch.date < today;
+            const pastClass = isPast ? 'is-past' : '';
+            const html = `
+                <div class="timeline-item ${pastClass}">
+                    <div class="schedule-date">${sch.date.replace(/-/g, '.')}</div>
+                    <div class="schedule-title">${sch.title}</div>
+                    <div class="schedule-desc">${sch.desc}</div>
+                </div>`;
+            scheduleContainer.innerHTML += html;
+        });
+
+        // ニュースデータの読み込み (JSON)
         fetch('news_data.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                allNewsData = data;
-                // 日付ソート
-                allNewsData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const list = document.getElementById('news-list');
+                list.innerHTML = ''; // ローディング消去
                 
-                // 初回表示
-                renderNews(allNewsData);
+                // 日付順ソート
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                data.forEach(news => {
+                    const isOfficial = news.source === 'Official';
+                    const tagClass = isOfficial ? 'tag-official' : 'tag-media';
+                    const icon = isOfficial ? '<i class="fa-solid fa-check-circle"></i> OFFICIAL' : '<i class="fa-solid fa-bolt"></i> MEDIA';
+                    
+                    const item = `
+                        <a href="${news.link}" target="_blank" class="news-card">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <span class="news-tag ${tagClass}">${icon}</span>
+                                <span style="font-size:0.75rem; color:#999;">${news.date.substring(5,16)}</span>
+                            </div>
+                            <div style="font-size:1rem; font-weight:700; line-height:1.4;">${news.title}</div>
+                            <div style="font-size:0.85rem; color:#666; margin-top:5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                                ${news.summary}
+                            </div>
+                        </a>`;
+                    list.innerHTML += item;
+                });
             })
-            .catch(error => {
-                document.getElementById('news-container').innerHTML += "<p style='text-align:center; color:#999; margin-top:20px;'>Failed to load news.</p>";
+            .catch(err => {
+                document.getElementById('news-list').innerHTML = `<p style="text-align:center; color:#999;">News Load Failed...</p>`;
             });
 
-        // ニュース描画関数
-        function renderNews(data) {
-            const container = document.getElementById('news-container');
-            // スケルトンを消す
-            const skeleton = document.getElementById('loading-skeleton');
-            if(skeleton) skeleton.style.display = 'none';
-            
-            // 既存の記事をクリア（タイトルは残すため、タイトル以降の要素を再構築）
-            // 簡易的にコンテナの中身をリセットしてタイトルだけ足す
-            container.innerHTML = '<div class="section-title">Latest Updates</div>';
-
-            data.forEach(news => {
-                // ソース判定
-                const isOfficial = news.source === 'Official';
-                const sourceClass = isOfficial ? 'source-official' : 'source-news';
-                
-                const card = document.createElement('a');
-                card.className = 'news-card';
-                card.href = news.link;
-                card.target = "_blank";
-                card.style.textDecoration = "none";
-                card.style.color = "inherit";
-
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="source-pill ${sourceClass}">
-                            ${isOfficial ? '<i class="fa-solid fa-check-circle"></i> OFFICIAL' : '<i class="fa-solid fa-bolt"></i> MEDIA'}
-                        </span>
-                        <span class="news-date">${news.date.substring(5, 16).replace('-', '/')}</span>
-                    </div>
-                    <h3 class="news-title">${news.title}</h3>
-                    <div style="font-size:0.85rem; color:#666; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                        ${news.summary}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // フィルター機能
-        function filterNews(type, element) {
-            // タブのアクティブ切り替え
-            document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-
-            // フィルタリング
-            if (type === 'all') {
-                renderNews(allNewsData);
-            } else {
-                const filtered = allNewsData.filter(news => news.source === type);
-                renderNews(filtered);
-            }
-        }
     </script>
 </body>
 </html>
